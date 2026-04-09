@@ -276,12 +276,27 @@ a:where(:not(.wp-element-button)) {
   fill: #ECAA00 !important;
 }
 
-/* Home — Anonymous Reporting: less space below heading; gold line was .is-style-elevated border-top on next section */
-.gram-anonymous-reporting.is-layout-constrained > .wp-block-media-text {
-  margin-block-start: 0.75rem !important;
+/* Home — Anonymous Reporting: tighten space between heading and QR row (WP global + theme stack margins on .is-layout-constrained > *) */
+.gram-anonymous-reporting.is-layout-constrained > .wp-block-heading {
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
 }
+.gram-anonymous-reporting.is-layout-constrained > .wp-block-media-text {
+  margin-block-start: 0.25rem !important;
+  margin-block-end: 0 !important;
+}
+/* Theme uses * + .is-style-elevated { margin-block-start: 4rem } and padding-block 4rem — too much after the QR block */
 .entry-content > .gram-anonymous-reporting + .wp-block-group.is-style-elevated {
   border-top: none;
+  margin-block-start: 1rem !important;
+  padding-block-start: 2rem !important;
+  padding-block-end: var(--ua_space--section, 4rem) !important;
+}
+/* Stacked layout: tighten space between QR figure and copy row (WP flow margins on inner blocks) */
+@media (max-width: 600px) {
+  .gram-anonymous-reporting .wp-block-media-text.is-stacked-on-mobile > .wp-block-media-text__content {
+    margin-block-start: 0 !important;
+  }
 }
 </style>
 
