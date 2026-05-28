@@ -23,7 +23,7 @@ def depth_from_root(rel_path: str) -> int:
 
 def search_form_action_for_file(rel_path: str) -> str:
     d = depth_from_root(rel_path)
-    return ("../" * d) + "search/index.html"
+    return ("../" * d) + "search/"
 
 
 def strip_html_for_text(raw: str) -> str:
@@ -51,6 +51,11 @@ def main():
         rel = os.path.relpath(filepath, SITE_ROOT).replace("\\", "/")
         if not should_index(rel):
             continue
+        index_path = rel
+        if rel.endswith("/index.html"):
+            index_path = rel[: -len("index.html")]
+        elif rel == "index.html":
+            index_path = ""
         try:
             with open(filepath, "r", encoding="utf-8", errors="replace") as f:
                 content = f.read()
@@ -61,7 +66,7 @@ def main():
         body_m = re.search(r"<body[^>]*>([\s\S]*)</body>", content, re.I)
         body = body_m.group(1) if body_m else content
         text = strip_html_for_text(body)[:8000]
-        entries.append({"path": rel, "title": title, "text": text})
+        entries.append({"path": index_path, "title": title, "text": text})
 
     out_json = os.path.join(SITE_ROOT, "search-index.json")
     with open(out_json, "w", encoding="utf-8") as f:
