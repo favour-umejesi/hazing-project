@@ -564,6 +564,73 @@ def replace_photography(content):
     return content
 
 
+FAMILY_PAGE_IMAGE_ALT = (
+    "Grambling State University students sitting together on a campus bench in GSU apparel"
+)
+
+
+FAMILY_STUDENTS_PHOTO_PAGES = (
+    "index.html",
+    "parents-and-family/index.html",
+    "index.html?p=46.html",
+)
+
+
+def replace_family_students_photo(content, rel_path: str):
+    """Use GSU campus bench photo on family-related sections."""
+    if rel_path not in FAMILY_STUDENTS_PHOTO_PAGES:
+        return content
+    content = re.sub(
+        r"gsu-student-board\.png(?:\?v=[^\"'\)]*)?",
+        "gsu-students-campus-bench.png",
+        content,
+    )
+    content = content.replace(
+        "Students gathered outdoors on the Grambling State University campus, "
+        "representing community and student life",
+        FAMILY_PAGE_IMAGE_ALT,
+    )
+    if rel_path == "index.html":
+        content = content.replace(
+            'width="880" height="525" src="wp-content/uploads/sites/11/2025/gsu-life/gsu-students-campus-bench.png"',
+            'width="1024" height="682" src="wp-content/uploads/sites/11/2025/gsu-life/gsu-students-campus-bench.png"',
+        )
+    return content
+
+
+HELP_HERE_IMAGE_ALT = "Eddie the Tiger statue at Grambling State University"
+
+
+def replace_home_help_section_photo(content, rel_path: str):
+    """Use Eddie the Tiger statue beside the Help is here block on the home page."""
+    if rel_path != "index.html":
+        return content
+    old_img = (
+        '<figure class="wp-block-media-text__media"><img decoding="async" width="300" height="179" '
+        'src="wp-content/uploads/sites/11/2025/gsu-life/gsu-students-walking.png" '
+        'alt="Grambling State University students on campus" class="wp-image-620 size-full" '
+        'srcset="wp-content/uploads/sites/11/2025/gsu-life/gsu-students-walking.png"'
+    )
+    new_img = (
+        '<figure class="wp-block-media-text__media"><img decoding="async" width="1024" height="683" '
+        'src="wp-content/uploads/sites/11/2025/gsu-life/eddie-the-tiger-statue.png" '
+        f'alt="{HELP_HERE_IMAGE_ALT}" class="wp-image-620 size-full" '
+        'srcset="wp-content/uploads/sites/11/2025/gsu-life/eddie-the-tiger-statue.png"'
+    )
+    if old_img in content:
+        return content.replace(old_img, new_img, 1)
+    content = re.sub(
+        r'(<figure class="wp-block-media-text__media"><img decoding="async" )[^>]*class="wp-image-620 size-full"[^>]*></figure>'
+        r'(<div class="wp-block-media-text__content is-layout-flow"><p class="has-large-font-size"><strong>Help is here</strong></p>)',
+        rf'\1width="1024" height="683" src="wp-content/uploads/sites/11/2025/gsu-life/eddie-the-tiger-statue.png" '
+        rf'alt="{HELP_HERE_IMAGE_ALT}" class="wp-image-620 size-full" '
+        rf'srcset="wp-content/uploads/sites/11/2025/gsu-life/eddie-the-tiger-statue.png" sizes="(max-width: 880px) 100vw, 880px" /></figure>\2',
+        content,
+        count=1,
+    )
+    return content
+
+
 JOURNEY_SECTION = re.compile(
     r'<section class="gram-journey alignfull"[\s\S]*?</section>\s*',
     re.I,
@@ -985,6 +1052,8 @@ def process_file(filepath):
     content = replace_navigation(content)
     content = replace_culture_messaging(content)
     content = replace_photography(content)
+    content = replace_family_students_photo(content, rel)
+    content = replace_home_help_section_photo(content, rel)
     content = inject_journey_section(content, rel)
     content = tag_home_anonymous_reporting(content, rel)
     content = clean_transparency_navigation(content, rel)
