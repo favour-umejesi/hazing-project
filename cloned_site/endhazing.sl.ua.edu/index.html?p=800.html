@@ -107,156 +107,314 @@ ol,ul{box-sizing:border-box}:root :where(.wp-block-list.has-background){padding:
 <link rel='shortlink' href='./' />
 <meta name="description" content="" /><meta property="og:description" content="" /><meta property="og:type" content="article" /><meta property="og:title" content="Kappa Alpha Psi - End Hazing | Grambling State University" /><meta name="twitter:card" content="summary" /><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="https://www.gram.edu/favicon.ico" sizes="32x32">  <style id="grambling-overrides">
 :root {
-  --ua_color-link: #ECAA00 !important;
-  --ua_color-link--inverse: #000000 !important;
+  /* Grambling State University brand colors (PMS 124 C gold, Process Black C) */
+  --gsu-gold: #ECAA00;
+  --gsu-gold-rgb: 236, 170, 0;
+  --gsu-black: #000000;
+  --gsu-white: #ffffff;
+  --gsu-gray-dark: #1a1a1a;
+  --ua_color-link: var(--gsu-gold) !important;
+  --ua_color-link--inverse: var(--gsu-black) !important;
+  /* Headings: Signika (www.gram.edu); body: Times New Roman (identity sheet fallback) */
+  --ua_font--heading: "Signika", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ua_font--body: "Times New Roman", Times, serif;
+  --ua_font--accent: "Signika", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.ua_minerva,
+.ua_minerva body,
+.ua_minerva .ua_page_content,
+.ua_minerva p,
+.ua_minerva li,
+.ua_minerva .wp-block-paragraph {
+  font-family: var(--ua_font--body);
+  font-weight: 400;
+  line-height: 1.42857143;
+}
+.ua_minerva h1,
+.ua_minerva h2,
+.ua_minerva h3,
+.ua_minerva h4,
+.ua_minerva h5,
+.ua_minerva h6,
+.ua_minerva .wp-block-heading,
+.ua_minerva .ua_page_title {
+  font-family: var(--ua_font--heading);
+  font-weight: 400;
+  line-height: 1.1;
+}
+.ua_minerva .ua_title-bar_name {
+  font-family: var(--ua_font--heading);
+  font-weight: 700;
+}
+.ua_minerva .ua_primary-navigation a {
+  font-family: var(--ua_font--heading);
+  font-weight: 400;
 }
 .ua_brand-bar {
-  background-color: #000000 !important;
+  background-color: var(--gsu-black) !important;
 }
 .ua_title-bar {
-  background-color: #ECAA00 !important;
+  background-color: var(--gsu-gold) !important;
 }
 .ua_title-bar_name,
 .ua_title-bar a {
-  color: #000000 !important;
+  color: var(--gsu-black) !important;
 }
 .ua_title-bar_expander {
-  color: #000000 !important;
+  color: var(--gsu-black) !important;
 }
 .ua_primary-navigation {
-  background-color: #000000 !important;
+  background-color: var(--gsu-black) !important;
 }
 .ua_primary-navigation a {
-  color: #ffffff !important;
+  color: var(--gsu-white) !important;
 }
 .ua_primary-navigation ul ul {
-  background-color: #1a1a1a !important;
+  background-color: var(--gsu-gray-dark) !important;
 }
 .ua_primary-navigation ul ul a {
-  color: #ECAA00 !important;
+  color: var(--gsu-gold) !important;
 }
 .ua_primary-navigation ul ul a:hover {
-  color: #ffffff !important;
+  color: var(--gsu-white) !important;
   background-color: #333333 !important;
 }
 .ua_primary-navigation li {
   border-color: #333333 !important;
 }
 .ua_primary-navigation button {
-  color: #ECAA00 !important;
+  color: var(--gsu-gold) !important;
 }
 :root :where(.wp-element-button, .wp-block-button__link) {
-  background-color: #000000 !important;
-  color: #ECAA00 !important;
-  border-color: #ECAA00 !important;
+  background-color: var(--gsu-black) !important;
+  color: var(--gsu-gold) !important;
+  border-color: var(--gsu-gold) !important;
 }
 :root :where(.wp-element-button:hover, .wp-block-button__link:hover) {
-  background-color: #ECAA00 !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
+  background-color: var(--gsu-gold) !important;
+  color: var(--gsu-black) !important;
+  border-color: var(--gsu-black) !important;
 }
 .ua_link-list_item {
-  background-color: #000000 !important;
-  color: #ECAA00 !important;
+  background-color: var(--gsu-black) !important;
+  color: var(--gsu-gold) !important;
 }
 .ua_link-list_item:hover {
-  background-color: #ECAA00 !important;
-  color: #000000 !important;
+  background-color: var(--gsu-gold) !important;
+  color: var(--gsu-black) !important;
 }
 .ua_site-footer {
-  background-color: #1a1a1a !important;
-  color: #ffffff !important;
+  background-color: var(--gsu-gray-dark) !important;
+  color: var(--gsu-white) !important;
 }
 .ua_site-footer h2,
 .ua_site-footer h3,
 .ua_site-footer h4 {
-  color: #ECAA00 !important;
+  color: var(--gsu-gold) !important;
 }
 .ua_site-footer p,
 .ua_site-footer li:not(.wp-social-link):not(.wp-block-social-link),
 .ua_site-footer span,
 .ua_site-footer div {
-  color: #ffffff !important;
+  color: var(--gsu-white) !important;
 }
 .ua_site-footer a:where(:not(.wp-element-button)) {
-  color: #ECAA00 !important;
+  color: var(--gsu-gold) !important;
 }
-/* Social icons in footer: gold logos, no chip background (overrides theme + footer li rules) */
 .ua_minerva .ua_site-footer .wp-block-social-links .wp-social-link,
 .ua_minerva .ua_site-footer .wp-block-social-links .wp-block-social-link {
   background: transparent !important;
   background-color: transparent !important;
-  color: #ECAA00 !important;
+  color: var(--gsu-gold) !important;
 }
 .ua_minerva .ua_site-footer .wp-block-social-links .wp-social-link a,
 .ua_minerva .ua_site-footer .wp-block-social-link-anchor {
   background: transparent !important;
   background-color: transparent !important;
-  color: #ECAA00 !important;
+  color: var(--gsu-gold) !important;
 }
 .ua_minerva .ua_site-footer .wp-block-social-links svg,
 .ua_minerva .ua_site-footer .wp-block-social-link-anchor svg {
-  fill: #ECAA00 !important;
-  color: #ECAA00 !important;
+  fill: var(--gsu-gold) !important;
+  color: var(--gsu-gold) !important;
 }
 .ua_brand-footer {
-  background-color: #000000 !important;
+  background-color: var(--gsu-black) !important;
 }
 .ua_brand-footer a {
-  color: #ECAA00 !important;
+  color: var(--gsu-gold) !important;
 }
 .ua_brand-footer p,
 .ua_brand-footer span {
-  color: #ffffff !important;
+  color: var(--gsu-white) !important;
 }
 a:where(:not(.wp-element-button)) {
-  color: #ECAA00;
+  color: var(--gsu-gold);
 }
 .ua_page_title {
-  color: #000000;
+  color: var(--gsu-black);
 }
 .is-style-elevated {
-  border-top: 4px solid #ECAA00;
+  border-top: 4px solid var(--gsu-gold);
 }
 .sl-QueryLoop.is-style-elevated {
-  border-top: 4px solid #ECAA00;
+  border-top: 4px solid var(--gsu-gold);
 }
 .sl-QueryLoop.is-style-elevated:hover {
-  border-top-color: #000000;
+  border-top-color: var(--gsu-black);
 }
 .ua_title-bar_search button {
-  background-color: #000000 !important;
-  color: #ECAA00 !important;
+  background-color: var(--gsu-black) !important;
+  color: var(--gsu-gold) !important;
 }
 .ua_card {
-  border-color: #ECAA00 !important;
+  border-color: var(--gsu-gold) !important;
 }
 .wp-block-button__link.wp-element-button {
-  border: 2px solid #ECAA00 !important;
+  border: 2px solid var(--gsu-gold) !important;
 }
 .ua_cookie-banner__container .ua_cookie-banner__content button {
-  background-color: #ECAA00 !important;
-  color: #000000 !important;
+  background-color: var(--gsu-gold) !important;
+  color: var(--gsu-black) !important;
 }
-
-.wp-block-social-link.wp-social-link,
-.wp-social-link-facebook.wp-block-social-link,
-.wp-social-link-instagram.wp-block-social-link,
-.wp-social-link-youtube.wp-block-social-link,
-.wp-social-link-twitter.wp-block-social-link,
-.wp-social-link-x.wp-block-social-link {
-  background: none !important;
-  background-color: transparent !important;
+/* Home page user-journey section */
+.gram-journey {
+  background: var(--gsu-gray-dark);
+  color: var(--gsu-white);
+  padding: var(--wp--preset--spacing--flow-double, 3rem) var(--wp--preset--spacing--flow, 1.5rem);
+  margin-top: var(--wp--preset--spacing--flow-double, 3rem);
+  margin-bottom: var(--wp--preset--spacing--flow, 1.5rem);
 }
-.wp-block-social-link a,
-.wp-block-social-link svg,
-.wp-block-social-link-anchor,
-.wp-block-social-link-anchor svg {
-  color: #ECAA00 !important;
-  fill: #ECAA00 !important;
+.gram-journey__heading {
+  text-align: center;
+  color: var(--gsu-gold);
+  margin-bottom: 0.5rem;
+}
+.gram-journey__intro {
+  text-align: center;
+  max-width: 42rem;
+  margin: 0 auto 2rem;
+}
+.gram-journey__grid {
+  display: grid;
+  gap: 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+.gram-journey__card {
+  background: var(--gsu-black);
+  border-top: 4px solid var(--gsu-gold);
+  padding: 1.25rem;
+}
+.gram-journey__card h3 {
+  color: var(--gsu-gold);
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+.gram-journey__card p {
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem;
+  line-height: 1.45;
+}
+.gram-journey__card a {
+  color: var(--gsu-gold);
+  font-weight: 600;
+  text-decoration: underline;
+}
+/* Home — Anonymous Reporting (tighter section spacing; keep full QR size) */
+.gram-anonymous-reporting {
+  padding-block: var(--wp--preset--spacing--50, 1.5rem);
+  margin-block: 0;
+}
+.gram-anonymous-reporting + .wp-block-group.is-style-elevated {
+  margin-block-start: var(--wp--preset--spacing--50, 1.5rem) !important;
+  padding-top: var(--wp--preset--spacing--flow, 1.5rem);
+}
+.gram-anonymous-reporting.is-layout-constrained > * {
+  margin-block-start: 0.5rem;
+}
+.gram-anonymous-reporting.is-layout-constrained > :first-child {
+  margin-block-start: 0;
+}
+.gram-anonymous-reporting .wp-block-media-text {
+  margin-block: 0;
+}
+.gram-anonymous-reporting .wp-block-media-text__media,
+.gram-anonymous-reporting .wp-block-media-text__content {
+  align-self: start;
+}
+.gram-anonymous-reporting .wp-block-media-text__media img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+.gram-anonymous-reporting .wp-block-media-text__content {
+  padding-block: 0;
+}
+.gram-anonymous-reporting .wp-block-media-text__content.is-layout-flow > * {
+  margin-block-start: 1rem;
+}
+.gram-anonymous-reporting .wp-block-media-text__content.is-layout-flow > :first-child {
+  margin-block-start: 0;
+}
+/* Alternate Activities — semi-transparent disclosure panels (How to Prevent) */
+#activities .wp-block-cover__inner-container {
+  color: #ffffff;
+}
+#activities .gram-alt-activities {
+  width: 100%;
+  max-width: 40rem;
+  margin: 1.25rem auto 0;
+  text-align: left;
+}
+#activities .gram-alt-activities details {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.5);
+  margin-top: 0.65rem;
+}
+#activities .gram-alt-activities summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.9rem 1rem;
+  font-family: var(--ua_font--heading);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+#activities .gram-alt-activities summary::-webkit-details-marker {
+  display: none;
+}
+#activities .gram-alt-activities details[open] summary {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+}
+#activities .gram-alt-activities .gram-alt-panel {
+  padding: 0.85rem 1rem 1.1rem;
+  color: #e8e9eb;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+#activities .gram-alt-activities .gram-alt-panel a {
+  color: var(--gsu-gold) !important;
+  text-decoration: underline;
+}
+#activities .gram-alt-activities .gram-alt-panel a:hover,
+#activities .gram-alt-activities .gram-alt-panel a:focus {
+  color: #ffffff !important;
+}
+#activities .gram-alt-activities ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+}
+#activities .gram-alt-activities li {
+  margin-top: 0.35rem;
 }
 </style>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
   <body class="wp-singular post-template-default single single-post postid-800 single-format-standard wp-embed-responsive wp-theme-ua-theme wp-child-theme-sl-ua-theme-3" >
@@ -315,17 +473,17 @@ a:where(:not(.wp-element-button)) {
       </form>
     </div>
       <nav aria-label="Primary Navigation" class="ua_primary-navigation" id="UA_PrimaryNav" aria-hidden="true">
-      <ul id="menu-main-menu" class="ua_primary-navigation_list"><li><a href="./">About</a></li>
-<li class="ua_menu-item-parent"><a href="./">What is Hazing</a>
+      <ul id="menu-main-menu" class="ua_primary-navigation_list"><li><a href="./">Our Commitment</a></li>
+<li class="ua_menu-item-parent"><a href="./">Understanding Hazing</a>
         <button>
           <span class="ua_primary-navigation_inactive_content">
-            <span class="fa fa-caret-down" title="Expand What is Hazing menu" aria-hidden="true"></span>
-            <span class="ua_visually-hidden">Expand What is Hazing menu</span>
+            <span class="fa fa-caret-down" title="Expand Understanding Hazing menu" aria-hidden="true"></span>
+            <span class="ua_visually-hidden">Expand Understanding Hazing menu</span>
           </span>
 
           <span class="ua_primary-navigation_active_content">
-            <span class="fa fa-caret-up" title="Close What is Hazing menu" aria-hidden="true"></span>
-            <span class="ua_visually-hidden">Close What is Hazing menu</span>
+            <span class="fa fa-caret-up" title="Close Understanding Hazing menu" aria-hidden="true"></span>
+            <span class="ua_visually-hidden">Close Understanding Hazing menu</span>
           </span>
         </button><ul>	<li><a href="./">Hazing Statistics</a></li>
 	<li><a href="./">FAQ</a></li>
@@ -334,37 +492,25 @@ a:where(:not(.wp-element-button)) {
 	<li><a href="./">State Law</a></li>
 </ul>
 </li>
-<li class="ua_menu-item-parent"><a href="./">Prevent It</a>
+<li class="ua_menu-item-parent"><a href="./">Prevention &amp; Education</a>
         <button>
           <span class="ua_primary-navigation_inactive_content">
-            <span class="fa fa-caret-down" title="Expand Prevent It menu" aria-hidden="true"></span>
-            <span class="ua_visually-hidden">Expand Prevent It menu</span>
+            <span class="fa fa-caret-down" title="Expand Prevention & Education menu" aria-hidden="true"></span>
+            <span class="ua_visually-hidden">Expand Prevention & Education menu</span>
           </span>
 
           <span class="ua_primary-navigation_active_content">
-            <span class="fa fa-caret-up" title="Close Prevent It menu" aria-hidden="true"></span>
-            <span class="ua_visually-hidden">Close Prevent It menu</span>
+            <span class="fa fa-caret-up" title="Close Prevention & Education menu" aria-hidden="true"></span>
+            <span class="ua_visually-hidden">Close Prevention & Education menu</span>
           </span>
         </button><ul>	<li><a href="./">How to Prevent</a></li>
 	<li><a href="./">Hazing Prevention Team</a></li>
 </ul>
 </li>
-<li class="ua_menu-item-parent"><a href="./">Report It</a>
-        <button>
-          <span class="ua_primary-navigation_inactive_content">
-            <span class="fa fa-caret-down" title="Expand Report It menu" aria-hidden="true"></span>
-            <span class="ua_visually-hidden">Expand Report It menu</span>
-          </span>
-
-          <span class="ua_primary-navigation_active_content">
-            <span class="fa fa-caret-up" title="Close Report It menu" aria-hidden="true"></span>
-            <span class="ua_visually-hidden">Close Report It menu</span>
-          </span>
-        </button><ul>	<li><a href="./">Campus Support Services</a></li>
-</ul>
-</li>
-<li><a href="./">Parents and Family</a></li>
-<li><a href="hazing-transparency-report/">Hazing Transparency Report</a></li>
+<li><a href="report-it/">Reporting Concerns</a></li>
+<li><a href="report-it/campus-support-services/">Student Support Resources</a></li>
+<li><a href="parents-and-family/">Family Engagement</a></li>
+<li class="ua_menu-item-parent"><a href="hazing-prevention-team/">Community Commitment</a><button><span class="ua_primary-navigation_inactive_content"><span class="fa fa-caret-down" title="Expand Community Commitment menu" aria-hidden="true"></span><span class="ua_visually-hidden">Expand Community Commitment menu</span></span><span class="ua_primary-navigation_active_content"><span class="fa fa-caret-up" title="Close Community Commitment menu" aria-hidden="true"></span><span class="ua_visually-hidden">Close Community Commitment menu</span></span></button><ul><li><a href="hazing-prevention-team/">Prevention Team</a></li><li><a href="hazing-transparency-report/">Transparency Report</a></li></ul></li>
 </ul>    </nav>
     </section>
               </header>
@@ -375,7 +521,7 @@ a:where(:not(.wp-element-button)) {
           
         
         <article class="ua_page_content is-layout-constrained">
-          <div class="ua_layout--standard"><h1 class="ua-util_align--left ua_page_title wp-block-post-title">Kappa Alpha Psi</h1></div>          <div class="entry-content wp-block-post-content is-layout-constrained wp-block-post-content-is-layout-constrained"><p>This is part of the <a href="hazing-transparency-report/" data-type="page" data-id="918">Hazing Transparency Report</a>, which contains <a href="hazing-transparency-report#terminology">terminology definitions</a> and <a href="hazing-transparency-report#rules">rules defined</a>.</p>
+          <div class="ua_layout--standard"><h1 class="ua-util_align--left ua_page_title wp-block-post-title">Kappa Alpha Psi</h1></div>          <div class="entry-content wp-block-post-content is-layout-constrained wp-block-post-content-is-layout-constrained"><p>This is part of the <a href="hazing-transparency-report/" data-type="page" data-id="918">Transparency Report</a>, which contains <a href="hazing-transparency-report#terminology">terminology definitions</a> and <a href="hazing-transparency-report#rules">rules defined</a>.</p>
 
 
 
@@ -484,14 +630,7 @@ a:where(:not(.wp-element-button)) {
                     <strong>Modified:</strong>
                     <span>April 9, 2026</span>
                   </p>
-                                                  <div class="is-layout-flex">
-                                                              <div class="ua_post-metadata_categories">
-                        <p style="text-transform: uppercase;"><strong>Categories<br></strong></p>
-                        <ul class="ua_tag-list"><li>
-                        <a href="posts/category/2026/index.html" rel="category tag">2026</a>                        </li></ul>
-                      </div>
-                                      </div>
-                                                        </footer>
+                                                  </footer>
                   </article>
 
               </main>
@@ -563,16 +702,13 @@ a:where(:not(.wp-element-button)) {
         <section class="ua_brand-footer">
   <div class="ua_brand-footer_content">
     <div class="ua_brand-footer_logo-copyright">
-      <img src="wp-content/uploads/sites/11/grambling-assets/gsu-g-logo-transparent.png" alt="Grambling State University Logo" style="width:50px;height:50px;object-fit:contain;background:transparent;">
-      <p><span><a href="https://www.gram.edu">Copyright &copy; 2026 Grambling State University</a></span> <span><a href="tel:+13182473811">(318) 247-3811</a></span> <span><a href="https://www.gram.edu/contact">Contact GSU</a></span></p>
+      <img src="wp-content/uploads/sites/11/grambling-assets/gsu-g-logo.png" alt="Grambling State University Logo" style="width:50px;height:50px;object-fit:contain;background:transparent;">
+      <p><span><a href="https://www.gram.edu">Copyright &copy; 2026 Grambling State University</a></span> <span><a href="tel:+13182473811">(318) 247-3811</a></span> <span><a href="https://www.gram.edu/aboutus/contact/">Contact GSU</a></span></p>
     </div>
     <nav aria-label="Legal Links">
       <ul class="ua_brand-footer_link-list">
-        <li><a href="https://www.gram.edu/compliance/">Compliance</a></li>
-        <li><a href="https://www.gram.edu/administration/legal/consumer-information/">Consumer Information</a></li>
-        <li><a href="https://www.gram.edu/contact">Contact Us</a></li>
+        <li><a href="https://www.gram.edu/aboutus/contact/">Contact Us</a></li>
         <li><a href="https://www.gram.edu/student-life/titleIX/">Title IX</a></li>
-        <li><a href="https://www.gram.edu/equal-opportunity">Equal Opportunity</a></li>
       </ul>
     </nav>
   </div>
