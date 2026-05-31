@@ -498,7 +498,7 @@ ol.wp-block-list ul,
   font-size: var(--ua_font-size--small, 1rem);
   line-height: var(--ua_line-height--small, 1.5rem);
   color: white;
-  background: #ECAA00;
+  background: #000000;
 }
 
 .ua_minerva .ua_brand-bar_content {
@@ -545,7 +545,7 @@ ol.wp-block-list ul,
 ================================================================= */
 .ua_minerva .ua_brand-footer {
   color: white;
-  background: #ECAA00;
+  background: #000000;
   font-size: var(--ua_font-size--xsmall, 0.75rem);
   line-height: var(--ua_line-height--xsmall, 1rem);
 }

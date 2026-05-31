@@ -63,40 +63,70 @@ GRAMBLING_CSS = f'''<style id="grambling-overrides">
   font-family: var(--ua_font--heading);
   font-weight: 400;
 }}
-.ua_brand-bar {{
+/* Site header — black brand bar + black primary nav; gold title row */
+.ua_minerva .ua_brand-bar,
+.ua_minerva .ua_brand-bar_content {{
   background-color: var(--gsu-black) !important;
-}}
-.ua_title-bar {{
-  background-color: var(--gsu-gold) !important;
-}}
-.ua_title-bar_name,
-.ua_title-bar a {{
-  color: var(--gsu-black) !important;
-}}
-.ua_title-bar_expander {{
-  color: var(--gsu-black) !important;
-}}
-.ua_primary-navigation {{
-  background-color: var(--gsu-black) !important;
-}}
-.ua_primary-navigation a {{
   color: var(--gsu-white) !important;
 }}
-.ua_primary-navigation ul ul {{
+.ua_minerva a.ua_brand-bar_link {{
+  color: var(--gsu-white) !important;
+}}
+.ua_minerva a.ua_brand-bar_logo:hover,
+.ua_minerva a.ua_brand-bar_logo:focus,
+.ua_minerva a.ua_brand-bar_link:hover,
+.ua_minerva a.ua_brand-bar_link:focus {{
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}}
+.ua_minerva .ua_title-bar {{
+  background-color: var(--gsu-gold) !important;
+}}
+.ua_minerva .ua_title-bar_name,
+.ua_minerva .ua_title-bar a.ua_title-bar_name {{
+  color: var(--gsu-black) !important;
+}}
+.ua_minerva .ua_title-bar_expander {{
+  color: var(--gsu-black) !important;
+}}
+.ua_minerva .ua_primary-navigation,
+.ua_minerva .ua_title-bar .ua_primary-navigation {{
+  background-color: var(--gsu-black) !important;
+}}
+.ua_minerva .ua_primary-navigation_list {{
+  background-color: var(--gsu-black) !important;
+}}
+.ua_minerva .ua_primary-navigation_list > li > a {{
+  color: var(--gsu-white) !important;
+}}
+.ua_minerva .ua_primary-navigation_list > li > a:hover,
+.ua_minerva .ua_primary-navigation_list > li > a:focus {{
+  color: var(--gsu-gold) !important;
+  border-bottom-color: var(--gsu-gold) !important;
+}}
+.ua_minerva .ua_primary-navigation ul ul {{
   background-color: var(--gsu-gray-dark) !important;
 }}
-.ua_primary-navigation ul ul a {{
+.ua_minerva .ua_primary-navigation ul ul a {{
   color: var(--gsu-gold) !important;
 }}
-.ua_primary-navigation ul ul a:hover {{
+.ua_minerva .ua_primary-navigation ul ul a:hover {{
   color: var(--gsu-white) !important;
   background-color: #333333 !important;
 }}
-.ua_primary-navigation li {{
+.ua_minerva .ua_primary-navigation li {{
   border-color: #333333 !important;
 }}
-.ua_primary-navigation button {{
+.ua_minerva .ua_primary-navigation button {{
   color: var(--gsu-gold) !important;
+}}
+.ua_minerva .ua_title-bar .ua_primary-navigation {{
+  flex-basis: 100%;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  margin-top: var(--ua_space--1, 0.5rem);
+  padding-top: var(--ua_space--1, 0.5rem);
+  padding-bottom: var(--ua_space--1, 0.5rem);
 }}
 :root :where(.wp-element-button, .wp-block-button__link) {{
   background-color: var(--gsu-black) !important;
@@ -270,6 +300,10 @@ a:where(:not(.wp-element-button)) {{
 }}
 .gram-anonymous-reporting .wp-block-media-text__content.is-layout-flow > :first-child {{
   margin-block-start: 0;
+}}
+/* Home hero — lighter overlay on the heading card (End Hazing landing) */
+body.home .ua_page_header .wp-block-cover__inner-container > .wp-block-cover > .wp-block-cover__background.has-background-dim-70 {{
+  opacity: 0.5 !important;
 }}
 /* Alternate Activities — semi-transparent disclosure panels (How to Prevent) */
 #activities .wp-block-cover__inner-container {{
@@ -596,8 +630,12 @@ def replace_brand_bar(content):
     # Replace myBama link
     content = re.sub(
         r'<a\s+href="http://mybama\.ua\.edu/"\s+class="ua_brand-bar_link">myBama</a>',
-        '<a href="https://portal.gram.edu/" class="ua_brand-bar_link">Banner Web</a>',
+        '<a href="https://portal.gram.edu/" class="ua_brand-bar_link">BannerWeb</a>',
         content
+    )
+    content = content.replace(
+        '>Banner Web</a>',
+        '>BannerWeb</a>',
     )
     return content
 
@@ -716,13 +754,17 @@ def replace_footer_student_life(content):
     # Replace social media links
     content = re.sub(
         r'<a\s+href="https://%20https://www\.facebook\.com/BamaStudentLife"',
-        '<a href="https://www.facebook.com/gramblingstateuniversity"',
+        '<a href="https://www.facebook.com/Grambling1901/"',
         content
     )
     content = re.sub(
         r'<a\s+href="https://www\.facebook\.com/BamaStudentLife"',
-        '<a href="https://www.facebook.com/gramblingstateuniversity"',
+        '<a href="https://www.facebook.com/Grambling1901/"',
         content
+    )
+    content = content.replace(
+        'href="https://www.facebook.com/gramblingstateuniversity"',
+        'href="https://www.facebook.com/Grambling1901/"',
     )
     content = re.sub(
         r'<a\s+href="https://instagram\.com/bamastudentlife/"',
@@ -731,8 +773,12 @@ def replace_footer_student_life(content):
     )
     content = re.sub(
         r'<a\s+href="https://www\.youtube\.com/user/bamastudentlife"',
-        '<a href="https://www.youtube.com/@GramblingStateUniversity"',
+        '<a href="https://www.youtube.com/user/GramblingStateUniv"',
         content
+    )
+    content = content.replace(
+        'href="https://www.youtube.com/@GramblingStateUniversity"',
+        'href="https://www.youtube.com/user/GramblingStateUniv"',
     )
     # Replace contact links
     content = re.sub(
