@@ -534,6 +534,53 @@ def replace_culture_messaging(content):
     return content
 
 
+OUR_COMMITMENT_PAGES = (
+    "about/index.html",
+    "index.html?p=11.html",
+)
+
+OUR_COMMITMENT_ENTRY = re.compile(
+    r'<div class="entry-content is-layout-flow wp-block-post-content '
+    r'is-layout-constrained wp-block-post-content-is-layout-constrained">\s*'
+    r"[\s\S]*?"
+    r'\s*</div>(?=\s*</div>\s*</main>)',
+    re.I,
+)
+
+
+def our_commitment_body(prefix: str) -> str:
+    """Full Our Commitment page copy with inline and quick links."""
+    p = prefix
+    return f'''<div class="entry-content is-layout-flow wp-block-post-content is-layout-constrained wp-block-post-content-is-layout-constrained">
+<p>Grambling State University is committed to fostering a campus culture defined by leadership, mutual respect, and student success. Eliminating hazing is essential to strengthening that culture and ensuring the safety and dignity of every member of our community.</p>
+
+
+
+<p>Hazing is a crime under <a href="{p}what-is-hazing/state-law/">Louisiana law</a> and a direct violation of <a href="{p}what-is-hazing/ua-hazing-policy/">University policy</a>. Grambling State University strictly prohibits hazing in any form, against any individual, organization, or member of the campus community.</p>
+
+
+
+<p>This site provides clear guidance on what GSU stands for: belonging, accountability, and care for one another — as well as what behaviors we do not tolerate. Here, you will find education, prevention tools, reporting pathways, and support resources designed to keep our community informed and empowered.</p>
+
+
+
+<p>If you have a concern or need to report an incident, please visit the <a href="{p}report-it/">Report It page</a>.</p>
+
+
+
+<p>Thank you for helping Grambling State University uphold our enduring promise: To be a place <strong>Where Everybody Is Somebody</strong>.</p>
+</div>'''
+
+
+def replace_our_commitment_content(content, rel_path: str):
+    """Set Our Commitment page body to GSU values copy with policy and journey links."""
+    if rel_path not in OUR_COMMITMENT_PAGES:
+        return content
+    prefix = "../" if rel_path.startswith("about/") else ""
+    body = our_commitment_body(prefix)
+    return OUR_COMMITMENT_ENTRY.sub(body, content, count=1)
+
+
 def replace_photography(content):
     """Swap dated or off-brand imagery; broaden alt text away from narrow org framing."""
     content = re.sub(
@@ -1051,6 +1098,7 @@ def process_file(filepath):
     content = replace_title_tags(content)
     content = replace_navigation(content)
     content = replace_culture_messaging(content)
+    content = replace_our_commitment_content(content, rel)
     content = replace_photography(content)
     content = replace_family_students_photo(content, rel)
     content = replace_home_help_section_photo(content, rel)
