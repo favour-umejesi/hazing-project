@@ -13,6 +13,14 @@ SITE_ROOT = os.path.join(
     "endhazing.sl.ua.edu",
 )
 
+UA_SEARCH_TERMS = re.compile(
+    r"University of Alabama|\bAlabama\b|Capstone|UAct|UAPD|"
+    r"policystat\.com|safecolleges\.com|UnivofAlabama|"
+    r"assetfiles\.ua\.edu|sl\.ua\.edu|www\.ua\.edu|"
+    r"Division of Student Life|bamastudentlife|Roll Tide|Tuscaloosa",
+    re.I,
+)
+
 
 def depth_from_root(rel_path: str) -> int:
     d = os.path.dirname(rel_path.replace("\\", "/"))
@@ -34,10 +42,37 @@ def strip_html_for_text(raw: str) -> str:
     return html_module.unescape(raw).strip()
 
 
+def extract_indexable_text(content: str) -> str:
+    """Index only main page content — skip nav, header chrome, and footer."""
+    main = re.search(r"<main[^>]*>([\s\S]*?)</main>", content, re.I)
+    if main:
+        chunk = main.group(1)
+        chunk = re.sub(r"<footer[\s\S]*", " ", chunk, flags=re.I)
+        return strip_html_for_text(chunk)
+    entry = re.search(
+        r'<div class="entry-content[\s\S]*?</div>\s*(?=</div>\s*</main>)',
+        content,
+        re.I,
+    )
+    if entry:
+        return strip_html_for_text(entry.group(0))
+    return strip_html_for_text(content)
+
+
+def sanitize_search_text(text: str) -> str:
+    text = re.sub(r"https?://[^\s]+", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
 def should_index(rel: str) -> bool:
     if "/feed/" in rel or rel.startswith("wp-json"):
         return False
     if rel.replace("\\", "/").startswith("search/"):
+        return False
+    if rel.startswith("posts/"):
+        return False
+    if rel.startswith("index.html?p="):
         return False
     if not rel.lower().endswith(".html"):
         return False
@@ -62,10 +97,12 @@ def main():
         except OSError:
             continue
         m = re.search(r"<title[^>]*>([\s\S]*?)</title>", content, re.I)
-        title = strip_html_for_text(m.group(1)) if m else rel
-        body_m = re.search(r"<body[^>]*>([\s\S]*)</body>", content, re.I)
-        body = body_m.group(1) if body_m else content
-        text = strip_html_for_text(body)[:8000]
+        title = sanitize_search_text(strip_html_for_text(m.group(1)) if m else rel)
+        text = sanitize_search_text(extract_indexable_text(content))[:8000]
+        if not text and not title:
+            continue
+        if UA_SEARCH_TERMS.search(title) or UA_SEARCH_TERMS.search(text):
+            continue
         entries.append({"path": index_path, "title": title, "text": text})
 
     out_json = os.path.join(SITE_ROOT, "search-index.json")
@@ -73,7 +110,6 @@ def main():
         json.dump(entries, f, ensure_ascii=False, indent=0)
     print(f"Wrote {len(entries)} entries to {out_json}")
 
-    # Fix search form action on every page
     updated = 0
     for filepath in all_html:
         rel = os.path.relpath(filepath, SITE_ROOT).replace("\\", "/")

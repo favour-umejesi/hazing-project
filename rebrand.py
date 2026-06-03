@@ -406,60 +406,87 @@ def inject_fonts(content):
     return content
 
 
-def nav_prefix_from_block(block: str) -> str:
-    """Relative path prefix for links in a primary-nav tail section."""
+SITE_TITLE = "Hazing Awareness & Prevention"
+
+PRIMARY_NAV_UL = re.compile(
+    r'(<ul id="menu-main-menu" class="ua_primary-navigation_list">)([\s\S]*?)(</ul>\s*</nav>)',
+    re.I,
+)
+
+
+def nav_prefix_from_nav_content(nav_inner: str) -> str:
+    """Relative path prefix for links in the primary navigation block."""
     for pattern in (
-        r'<a href="((?:\.\./|(?:\./)+)*)parents-and-family/">',
-        r'<a href="((?:\.\./|(?:\./)+)*)report-it/campus-support-services/">',
-        r'<a href="((?:\.\./|(?:\./)+)*)report-it/">',
-        r'<a href="((?:\.\./|(?:\./)+)*)hazing-prevention-team/">',
+        r'<a href="((?:\.\./|(?:\./)+)*)what-is-hazing/',
+        r'<a href="((?:\.\./|(?:\./)+)*)prevent-it/',
+        r'<a href="((?:\.\./|(?:\./)+)*)about/',
+        r'<a href="((?:\.\./|(?:\./)+)*)report-it/',
+        r'<a href="((?:\.\./|(?:\./)+)*)parents-and-family/',
+        r'<a href="((?:\.\./|(?:\./)+)*)hazing-prevention-team/',
     ):
-        m = re.search(pattern, block)
+        m = re.search(pattern, nav_inner)
         if m:
             return m.group(1)
     return ""
 
 
-def normalize_primary_nav_tail(content: str) -> str:
-    """Rebuild reporting, student support, family, and community commitment nav items."""
-    pat = re.compile(
-        r'(?:<li class="ua_menu-item-parent"><a href="[^"]*">Reporting Concerns</a>[\s\S]*?'
-        r'|<li><a href="[^"]*">Reporting Concerns</a></li>\s*)'
-        r'[\s\S]*?(?=</ul>\s*</nav>)',
-        re.I,
+def nav_menu_button(menu_name: str) -> str:
+    return (
+        f'<button><span class="ua_primary-navigation_inactive_content">'
+        f'<span class="fa fa-caret-down" title="Expand {menu_name}" aria-hidden="true"></span>'
+        f'<span class="ua_visually-hidden">Expand {menu_name}</span></span>'
+        f'<span class="ua_primary-navigation_active_content">'
+        f'<span class="fa fa-caret-up" title="Close {menu_name}" aria-hidden="true"></span>'
+        f'<span class="ua_visually-hidden">Close {menu_name}</span></span></button>'
     )
+
+
+def primary_nav_inner(prefix: str) -> str:
+    """Primary nav order: Understanding → Prevention → Reporting → Support → Commitment → Transparency."""
+    p = prefix
+    commitment_menu = "Our Commitment &amp; Community Commitment"
+    return (
+        f'<li class="ua_menu-item-parent"><a href="{p}what-is-hazing/">Understanding Hazing</a>'
+        f"{nav_menu_button('Understanding Hazing menu')}"
+        f'<ul>\t<li><a href="{p}what-is-hazing/hazing-statistics/">Hazing Statistics</a></li>\n'
+        f'\t<li><a href="{p}what-is-hazing/faq/">FAQ</a></li>\n'
+        f'\t<li><a href="{p}what-is-hazing/ua-hazing-policy/">GSU Hazing Policy</a></li>\n'
+        f'\t<li><a href="{p}what-is-hazing/ua-code-of-student-conduct/">GSU Code of Student Conduct</a></li>\n'
+        f'\t<li><a href="{p}what-is-hazing/state-law/">State Law</a></li>\n'
+        f"</ul>\n</li>\n"
+        f'<li class="ua_menu-item-parent"><a href="{p}prevent-it/">Prevention &amp; Education</a>'
+        f"{nav_menu_button('Prevention & Education menu')}"
+        f'<ul>\t<li><a href="{p}prevent-it/how-to-prevent/">How to Prevent</a></li>\n'
+        f'\t<li><a href="{p}parents-and-family/">Family Engagement</a></li>\n'
+        f"</ul>\n</li>\n"
+        f'<li><a href="{p}report-it/">Reporting Concerns</a></li>\n'
+        f'<li><a href="{p}report-it/campus-support-services/">Student Support Resources</a></li>\n'
+        f'<li><a href="{p}hazing-transparency-report/">Transparency Report</a></li>\n'
+        f'<li class="ua_menu-item-parent"><a href="{p}about/">{commitment_menu}</a>'
+        f"{nav_menu_button('Our Commitment & Community Commitment menu')}"
+        f'<ul><li><a href="{p}about/">Our Commitment</a></li>'
+        f'<li><a href="{p}hazing-prevention-team/">Prevention Team</a></li></ul></li>'
+    )
+
+
+def rebuild_primary_navigation(content: str) -> str:
+    """Replace the full primary nav with the GSU journey order and structure."""
 
     def repl(m: re.Match[str]) -> str:
-        prefix = nav_prefix_from_block(m.group(0))
-        return (
-            f'<li><a href="{prefix}report-it/">Reporting Concerns</a></li>\n'
-            f'<li><a href="{prefix}report-it/campus-support-services/">'
-            f"Student Support Resources</a></li>\n"
-            f'<li><a href="{prefix}parents-and-family/">Family Engagement</a></li>\n'
-            f"{community_commitment_nav_block(prefix)}\n"
-        )
+        prefix = nav_prefix_from_nav_content(m.group(2))
+        return f"{m.group(1)}{primary_nav_inner(prefix)}{m.group(3)}"
 
-    return pat.sub(repl, content, count=1)
+    return PRIMARY_NAV_UL.sub(repl, content, count=1)
 
 
-def community_commitment_nav_block(prefix: str) -> str:
-    """Single Community Commitment dropdown for the primary nav."""
-    return (
-        f'<li class="ua_menu-item-parent"><a href="{prefix}hazing-prevention-team/">Community Commitment</a>'
-        f'<button><span class="ua_primary-navigation_inactive_content">'
-        f'<span class="fa fa-caret-down" title="Expand Community Commitment menu" aria-hidden="true"></span>'
-        f'<span class="ua_visually-hidden">Expand Community Commitment menu</span></span>'
-        f'<span class="ua_primary-navigation_active_content">'
-        f'<span class="fa fa-caret-up" title="Close Community Commitment menu" aria-hidden="true"></span>'
-        f'<span class="ua_visually-hidden">Close Community Commitment menu</span></span></button>'
-        f'<ul><li><a href="{prefix}hazing-prevention-team/">Prevention Team</a></li>'
-        f'<li><a href="{prefix}hazing-transparency-report/">Transparency Report</a></li></ul></li>'
-    )
+def normalize_primary_nav_tail(content: str) -> str:
+    """Rebuild primary navigation (alias for rebuild_primary_navigation)."""
+    return rebuild_primary_navigation(content)
 
 
 def normalize_community_commitment_nav(content: str) -> str:
-    """Deprecated: use normalize_primary_nav_tail. Kept as alias for clarity."""
-    return normalize_primary_nav_tail(content)
+    """Deprecated: use rebuild_primary_navigation."""
+    return rebuild_primary_navigation(content)
 
 
 def replace_navigation(content):
@@ -490,7 +517,31 @@ def replace_navigation(content):
         content,
     )
 
-    return normalize_primary_nav_tail(content)
+    return rebuild_primary_navigation(content)
+
+
+def replace_site_title(content: str) -> str:
+    """Rename site branding from End Hazing to Hazing Awareness & Prevention."""
+    content = content.replace("<title>End Hazing</title>", f"<title>{SITE_TITLE}</title>")
+    content = re.sub(r"\| End Hazing</title>", f"| {SITE_TITLE}</title>", content)
+    content = content.replace("| End Hazing |", f"| {SITE_TITLE} |")
+    content = content.replace("- End Hazing |", f"- {SITE_TITLE} |")
+    content = content.replace("End Hazing | Grambling", f"{SITE_TITLE} | Grambling")
+    content = re.sub(
+        r'(class="ua_title-bar_name">)\s*End Hazing\s*(</a>)',
+        rf"\1\n          {SITE_TITLE}        \2",
+        content,
+    )
+    content = content.replace("Explore End Hazing at GSU", f"Explore {SITE_TITLE} at GSU")
+    content = content.replace(
+        ">Our Commitment | End Hazing</title>",
+        f">Our Commitment | {SITE_TITLE}</title>",
+    )
+    content = content.replace(
+        ">About | End Hazing</title>",
+        f">Our Commitment | {SITE_TITLE}</title>",
+    )
+    return content
 
 
 def replace_culture_messaging(content):
@@ -556,11 +607,11 @@ def our_commitment_body(prefix: str) -> str:
 
 
 
-<p>Hazing is a crime under <a href="{p}what-is-hazing/state-law/">Louisiana law</a> and a direct violation of <a href="{p}what-is-hazing/ua-hazing-policy/">University policy</a>. Grambling State University strictly prohibits hazing in any form, against any individual, organization, or member of the campus community.</p>
+<p>Hazing is a crime under Louisiana law and a direct violation of University policy. Grambling State University strictly prohibits hazing in any form, against any individual, organization, or member of the campus community.</p>
 
 
 
-<p>This site provides clear guidance on what GSU stands for: belonging, accountability, and care for one another — as well as what behaviors we do not tolerate. Here, you will find education, prevention tools, reporting pathways, and support resources designed to keep our community informed and empowered.</p>
+<p>This site provides clear guidance on what GSU stands for: belonging, accountability, and care for one another as well as what behaviors we do not tolerate. Here, you will find education, prevention tools, reporting pathways, and support resources designed to keep our community informed and empowered.</p>
 
 
 
@@ -579,6 +630,37 @@ def replace_our_commitment_content(content, rel_path: str):
     prefix = "../" if rel_path.startswith("about/") else ""
     body = our_commitment_body(prefix)
     return OUR_COMMITMENT_ENTRY.sub(body, content, count=1)
+
+
+GSU_HAZING_POLICY_PDF = (
+    "https://www.gram.edu/faculty/policies/docs/Hazing%20Prevention%20and%20Awareness%20Policy.pdf"
+)
+GSU_HAZING_POLICY_BUTTON = re.compile(
+    r'<div class="wp-block-button has-custom-width wp-block-button__width-100">'
+    r'<a class="wp-block-button__link wp-element-button" href="[^"]*"[^>]*>'
+    r"(?:view the full GSU Hazing Policy|view the full UA Hazing Policy|"
+    r"Grambling State University Hazing Policy)"
+    r"</a></div>",
+    re.I,
+)
+
+
+def replace_gsu_hazing_policy_button(content):
+    """Point GSU Hazing Policy page PDF button to official Grambling policy."""
+    button = (
+        f'<div class="wp-block-button has-custom-width wp-block-button__width-100">'
+        f'<a class="wp-block-button__link wp-element-button" href="{GSU_HAZING_POLICY_PDF}" '
+        f'target="_blank" rel="noreferrer noopener">Grambling State University Hazing Policy</a></div>'
+    )
+    return GSU_HAZING_POLICY_BUTTON.sub(button, content)
+
+
+def replace_campus_support_email(content):
+    """Use OSEL contact email on Student Support Resources (Campus Support) page."""
+    return content.replace(
+        'href="mailto:judicialaffairs@gram.edu">judicialaffairs@gram.edu</a>',
+        'href="mailto:turnert@gram.edu">turnert@gram.edu</a>',
+    )
 
 
 def replace_photography(content):
@@ -687,16 +769,15 @@ JOURNEY_SECTION = re.compile(
 def journey_section_html(prefix: str = "") -> str:
     return f'''
 <section class="gram-journey alignfull" aria-labelledby="gram-journey-heading">
-<h2 id="gram-journey-heading" class="gram-journey__heading wp-block-heading has-text-align-center">Explore End Hazing at GSU</h2>
-<p class="gram-journey__intro">Move through the site by what you need — from our shared values to reporting and support.</p>
+<h2 id="gram-journey-heading" class="gram-journey__heading wp-block-heading has-text-align-center">Explore {SITE_TITLE} at GSU</h2>
+<p class="gram-journey__intro">Move through the site by what you need — from understanding hazing to prevention, reporting, and support.</p>
 <div class="gram-journey__grid">
-<article class="gram-journey__card"><h3>Our Commitment</h3><p>How GSU connects anti-hazing work to leadership and student success.</p><a href="{prefix}about/">Learn our commitment</a></article>
 <article class="gram-journey__card"><h3>Understanding Hazing</h3><p>Definitions, statistics, policies, and FAQs.</p><a href="{prefix}what-is-hazing/">Understand hazing</a></article>
-<article class="gram-journey__card"><h3>Prevention &amp; Education</h3><p>Practical steps and the Hazing Prevention Team.</p><a href="{prefix}prevent-it/">Prevent hazing</a></article>
+<article class="gram-journey__card"><h3>Prevention &amp; Education</h3><p>Prevention steps, training, and guidance for families.</p><a href="{prefix}prevent-it/">Prevent hazing</a></article>
 <article class="gram-journey__card"><h3>Reporting Concerns</h3><p>Anonymous and direct reporting options.</p><a href="{prefix}report-it/">Report a concern</a></article>
 <article class="gram-journey__card"><h3>Student Support Resources</h3><p>Campus offices ready to help.</p><a href="{prefix}report-it/campus-support-services/">Find support</a></article>
-<article class="gram-journey__card"><h3>Family Engagement</h3><p>Guidance for parents and families.</p><a href="{prefix}parents-and-family/">Support your student</a></article>
-<article class="gram-journey__card"><h3>Community Commitment</h3><p>Prevention team and transparency reporting.</p><a href="{prefix}hazing-prevention-team/">See our commitment</a></article>
+<article class="gram-journey__card"><h3>Transparency Report</h3><p>Confirmed hazing violations and institutional accountability.</p><a href="{prefix}hazing-transparency-report/">View the report</a></article>
+<article class="gram-journey__card"><h3>Our Commitment &amp; Community</h3><p>GSU values and the Hazing Prevention Team.</p><a href="{prefix}about/">Our commitment</a></article>
 </div>
 </section>
 '''
@@ -980,6 +1061,54 @@ def replace_text_references(content):
     return content
 
 
+def scrub_ua_content(content: str) -> str:
+    """Remove remaining University of Alabama references from page content."""
+    prevent_intro = (
+        "It&#8217;s our job as a community to stand against hazing and build a culture of "
+        "respect at Grambling State University. Select the links below to find out how you "
+        "can help prevent hazing on campus."
+    )
+    content = content.replace(
+        "It&#8217;s our job as a community to stand against hazing practices and end it "
+        "for good at the Capstone. Select the links below to find out how you can fight "
+        "back against hazing.",
+        prevent_intro,
+    )
+    content = content.replace(
+        "It's our job as a community to stand against hazing practices and end it "
+        "for good at the Capstone. Select the links below to find out how you can fight "
+        "back against hazing.",
+        prevent_intro.replace("&#8217;", "'"),
+    )
+    content = re.sub(r"\bat the Capstone\b", "at Grambling State University", content, flags=re.I)
+    content = re.sub(
+        r"https://ua-public\.policystat\.com/policy/14664154/latest",
+        GSU_HAZING_POLICY_PDF,
+        content,
+    )
+    content = content.replace("UAct REport", "G Safe report")
+    content = content.replace("UAct Report", "G Safe report")
+    content = content.replace("UAPD Conduct Referral", "GSUPD conduct referral")
+    content = content.replace("Arrests by UAPD", "Arrests by GSUPD")
+    content = content.replace("UAPD", "GSUPD")
+    content = re.sub(
+        r'<link rel=[\'"]dns-prefetch[\'"] href=[\'"]https://assetfiles\.ua\.edu/[\'"] />\s*',
+        "",
+        content,
+    )
+    content = re.sub(
+        r'<link rel="alternate" title="oEmbed \(JSON\)"[^>]*href="[^"]*sl\.ua\.edu[^"]*"[^>]*/>\s*',
+        "",
+        content,
+    )
+    content = re.sub(
+        r'<link rel="alternate" title="oEmbed \(XML\)"[^>]*href="[^"]*sl\.ua\.edu[^"]*"[^>]*/>\s*',
+        "",
+        content,
+    )
+    return content
+
+
 def replace_gram_external_links(content):
     """Keep Gram.edu footer / Student Life links on current official URLs."""
     content = content.replace(
@@ -1013,9 +1142,6 @@ def replace_gram_external_links(content):
         "https://www.gram.edu/titleix",
         "https://www.gram.edu/student-life/titleIX/",
     )
-    return content
-
-
     return content
 
 
@@ -1095,10 +1221,14 @@ def process_file(filepath):
     content = replace_footer_student_life(content)
     content = replace_gram_external_links(content)
     content = replace_text_references(content)
+    content = scrub_ua_content(content)
+    content = replace_site_title(content)
     content = replace_title_tags(content)
     content = replace_navigation(content)
     content = replace_culture_messaging(content)
     content = replace_our_commitment_content(content, rel)
+    content = replace_gsu_hazing_policy_button(content)
+    content = replace_campus_support_email(content)
     content = replace_photography(content)
     content = replace_family_students_photo(content, rel)
     content = replace_home_help_section_photo(content, rel)

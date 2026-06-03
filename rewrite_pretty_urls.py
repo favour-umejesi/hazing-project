@@ -112,6 +112,7 @@ def rewrite_content(html: str, from_file: Path, root: Path, id_map: dict[str, st
 # Anchor text -> folder path (used when href is only a chain of ../ with no target folder)
 NAV_LABEL_TO_PATH: dict[str, str] = {
     "Our Commitment": "about/",
+    "Our Commitment & Community Commitment": "about/",
     "About": "about/",
     "Understanding Hazing": "what-is-hazing/",
     "What is Hazing": "what-is-hazing/",
